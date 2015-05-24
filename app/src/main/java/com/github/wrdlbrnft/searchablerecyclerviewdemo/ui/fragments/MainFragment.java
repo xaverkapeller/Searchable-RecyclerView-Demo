@@ -14,8 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.R;
-import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.models.ExampleModel;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.ExampleAdapter;
+import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.models.ExampleModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,11 +122,13 @@ public class MainFragment extends Fragment implements SearchView.OnQueryTextList
     }
 
     @Override
-    public boolean onQueryTextChange(String s) {
+    public boolean onQueryTextChange(String query) {
+        query = query.toLowerCase();
 
         final List<ExampleModel> filteredModelList = new ArrayList<>();
         for (ExampleModel model : mModels) {
-            if (model.getText().toLowerCase().contains(s.toLowerCase())) {
+            final String text = model.getText().toLowerCase();
+            if (text.contains(query)) {
                 filteredModelList.add(model);
             }
         }
@@ -136,7 +138,7 @@ public class MainFragment extends Fragment implements SearchView.OnQueryTextList
     }
 
     @Override
-    public boolean onQueryTextSubmit(String s) {
+    public boolean onQueryTextSubmit(String query) {
         return false;
     }
 }
