@@ -27,7 +27,6 @@ public class MainFragment extends Fragment implements SearchView.OnQueryTextList
     }
 
     private static final String[] MOVIES = new String[]{
-            "Opening",
             "The Woman in Black: Angel of Death",
             "20 Once Again",
             "Taken 3",
@@ -123,15 +122,7 @@ public class MainFragment extends Fragment implements SearchView.OnQueryTextList
 
     @Override
     public boolean onQueryTextChange(String query) {
-        query = query.toLowerCase();
-
-        final List<ExampleModel> filteredModelList = new ArrayList<>();
-        for (ExampleModel model : mModels) {
-            final String text = model.getText().toLowerCase();
-            if (text.contains(query)) {
-                filteredModelList.add(model);
-            }
-        }
+        final List<ExampleModel> filteredModelList = filter(mModels, query);
         mAdapter.animateTo(filteredModelList);
         mRecyclerView.scrollToPosition(0);
         return true;
@@ -140,5 +131,18 @@ public class MainFragment extends Fragment implements SearchView.OnQueryTextList
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
+    }
+
+    private List<ExampleModel> filter(List<ExampleModel> models, String query) {
+        query = query.toLowerCase();
+
+        final List<ExampleModel> filteredModelList = new ArrayList<>();
+        for (ExampleModel model : models) {
+            final String text = model.getText().toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 }
