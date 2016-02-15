@@ -5,11 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.R;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.models.ExampleModel;
-import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.viewholder.ExampleViewHolder;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +17,18 @@ import java.util.List;
  * User: Xaver
  * Date: 24/05/15
  */
-public class ExampleAdapter extends RecyclerView.Adapter<ExampleViewHolder> {
+public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleViewHolder> {
 
     private final LayoutInflater mInflater;
     private final List<ExampleModel> mModels;
+    ItemClickListener onItemClickListener;
+
+    /**
+     * Declare the ItemClickListener
+     */
+    public interface ItemClickListener{
+        public void onItemClick(View view,int position);
+    }
 
     public ExampleAdapter(Context context, List<ExampleModel> models) {
         mInflater = LayoutInflater.from(context);
@@ -94,5 +101,39 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleViewHolder> {
         final ExampleModel model = mModels.remove(fromPosition);
         mModels.add(toPosition, model);
         notifyItemMoved(fromPosition, toPosition);
+    }
+
+    /**
+     * Method for initializing the adapter's onitemClickListener to the one which is
+     * defined in the Main thread. The user can define the work to be done in the listener
+     * at main thread and assign it to the adapter's Listener.
+     * @param listener : NotNull. Custom ItemClickListener defined by the user
+     */
+
+    public void setItemClickListener(final ItemClickListener listener){
+        this.onItemClickListener=listener;
+    }
+
+    public class ExampleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private final TextView tvText;
+
+        public ExampleViewHolder(View itemView) {
+            super(itemView);
+
+            tvText = (TextView) itemView.findViewById(R.id.tvText);
+            itemView.setOnClickListener(this);
+        }
+
+        public void bind(ExampleModel model) {
+            tvText.setText(model.getText());
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(onItemClickListener!=null)
+                onItemClickListener.onItemClick(v,getAdapterPosition());
+        }
+
     }
 }
