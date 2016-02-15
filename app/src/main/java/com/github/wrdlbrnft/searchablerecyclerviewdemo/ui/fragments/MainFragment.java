@@ -6,17 +6,19 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.R;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.ExampleAdapter;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.models.ExampleModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,6 +111,16 @@ public class MainFragment extends Fragment implements SearchView.OnQueryTextList
 
         mAdapter = new ExampleAdapter(getActivity(), mModels);
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setItemClickListener(new ExampleAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                //TODO: Do something with the view or the position.
+                TextView tv= (TextView) view.findViewById(R.id.tvText);
+                Toast.makeText(getActivity(),"Clicked at: "+MOVIES[position],
+                        Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
     }
 
     @Override
