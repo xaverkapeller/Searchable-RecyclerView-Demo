@@ -86,13 +86,23 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleViewHolder> {
     }
 
     public void addItem(int position, ExampleModel model) {
-        mModels.add(position, model);
-        notifyItemInserted(position);
+        if (position >= mModels.size()) {
+            mModels.add(model);
+            notifyItemInserted(mModels.size() - 1);
+        } else {
+            mModels.add(position, model);
+            notifyItemInserted(position);
+        }
     }
 
     public void moveItem(int fromPosition, int toPosition) {
         final ExampleModel model = mModels.remove(fromPosition);
-        mModels.add(toPosition, model);
-        notifyItemMoved(fromPosition, toPosition);
+        if (toPosition >= mModels.size()) {
+            mModels.add(model);
+            notifyItemMoved(fromPosition, mModels.size() - 1);
+        } else {
+            mModels.add(toPosition, model);
+            notifyItemMoved(fromPosition, toPosition);
+        }
     }
 }
