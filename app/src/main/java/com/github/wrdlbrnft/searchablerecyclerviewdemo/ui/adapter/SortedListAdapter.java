@@ -1,13 +1,13 @@
-package com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.sortedlistadapter;
+package com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -17,15 +17,12 @@ import java.util.List;
  * User: Xaver
  * Date: 13/08/16
  */
-
-public abstract class SortedListAdapter<T extends ViewModel> extends RecyclerView.Adapter<BaseViewHolder<? extends T>> {
+public abstract class SortedListAdapter<T extends SortedListAdapter.ViewModel> extends RecyclerView.Adapter<SortedListAdapter.ViewHolder<? extends T>> {
 
     public interface Editor<T extends ViewModel> {
         Editor<T> add(T item);
-        Editor<T> add(T... items);
         Editor<T> add(List<T> items);
         Editor<T> remove(T item);
-        Editor<T> remove(T... items);
         Editor<T> remove(List<T> items);
         Editor<T> update(List<T> items);
         void commit();
@@ -35,72 +32,66 @@ public abstract class SortedListAdapter<T extends ViewModel> extends RecyclerVie
         boolean test(T item);
     }
 
-    private final SortedList.Callback<T> mCallback = new SortedList.Callback<T>() {
-        @Override
-        public int compare(T a, T b) {
-            return mComparator.compare(a, b);
-        }
-
-        @Override
-        public void onInserted(int position, int count) {
-            notifyItemRangeInserted(position, count);
-        }
-
-        @Override
-        public void onRemoved(int position, int count) {
-            notifyItemRangeRemoved(position, count);
-        }
-
-        @Override
-        public void onMoved(int fromPosition, int toPosition) {
-            notifyItemMoved(fromPosition, toPosition);
-        }
-
-        @Override
-        public void onChanged(int position, int count) {
-            notifyItemRangeChanged(position, count);
-        }
-
-        @Override
-        public boolean areContentsTheSame(T oldItem, T newItem) {
-            return SortedListAdapter.this.areContentsTheSame(oldItem, newItem);
-        }
-
-        @Override
-        public boolean areItemsTheSame(T item1, T item2) {
-            return SortedListAdapter.this.areItemsTheSame(item1, item2);
-        }
-    };
-
     private final LayoutInflater mInflater;
     private final SortedList<T> mSortedList;
     private final Comparator<T> mComparator;
 
     public SortedListAdapter(Context context, Class<T> itemClass, Comparator<T> comparator) {
         mInflater = LayoutInflater.from(context);
-        mSortedList = new SortedList<>(itemClass, mCallback);
         mComparator = comparator;
+
+        mSortedList = new SortedList<>(itemClass, new SortedList.Callback<T>() {
+            @Override
+            public int compare(T a, T b) {
+                return mComparator.compare(a, b);
+            }
+
+            @Override
+            public void onInserted(int position, int count) {
+                notifyItemRangeInserted(position, count);
+            }
+
+            @Override
+            public void onRemoved(int position, int count) {
+                notifyItemRangeRemoved(position, count);
+            }
+
+            @Override
+            public void onMoved(int fromPosition, int toPosition) {
+                notifyItemMoved(fromPosition, toPosition);
+            }
+
+            @Override
+            public void onChanged(int position, int count) {
+                notifyItemRangeChanged(position, count);
+            }
+
+            @Override
+            public boolean areContentsTheSame(T oldItem, T newItem) {
+                return SortedListAdapter.this.areItemContentsTheSame(oldItem, newItem);
+            }
+
+            @Override
+            public boolean areItemsTheSame(T item1, T item2) {
+                return SortedListAdapter.this.areItemsTheSame(item1, item2);
+            }
+        });
     }
 
     @Override
-    public final BaseViewHolder<? extends T> onCreateViewHolder(ViewGroup parent, int viewType) {
+    public final ViewHolder<? extends T> onCreateViewHolder(ViewGroup parent, int viewType) {
         return onCreateViewHolder(mInflater, parent, viewType);
     }
 
-    protected abstract BaseViewHolder<? extends T> onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType);
+    protected abstract ViewHolder<? extends T> onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType);
 
-    protected boolean areContentsTheSame(T oldItem, T newItem) {
-        return oldItem.equals(newItem);
-    }
-
-    protected boolean areItemsTheSame(T item1, T item2) {
-        return item1 == item2;
-    }
+    protected abstract boolean areItemContentsTheSame(T oldItem, T newItem);
+    protected abstract boolean areItemsTheSame(T item1, T item2);
 
     @Override
-    public final void onBindViewHolder(BaseViewHolder<? extends T> holder, int position) {
+    public final void onBindViewHolder(ViewHolder<? extends T> holder, int position) {
         final T item = mSortedList.get(position);
-        ((BaseViewHolder<T>) holder).bind(item);
+        ((ViewHolder<T>) holder).bind(item);
     }
 
     public final Editor<T> edit() {
@@ -156,12 +147,6 @@ public abstract class SortedListAdapter<T extends ViewModel> extends RecyclerVie
             return this;
         }
 
-        @SafeVarargs
-        @Override
-        public final Editor<T> add(T... items) {
-            return add(Arrays.asList(items));
-        }
-
         @Override
         public Editor<T> add(final List<T> items) {
             mActions.add(new Action<T>() {
@@ -180,20 +165,6 @@ public abstract class SortedListAdapter<T extends ViewModel> extends RecyclerVie
                 @Override
                 public void perform(SortedList<T> list) {
                     mSortedList.remove(item);
-                }
-            });
-            return this;
-        }
-
-        @SafeVarargs
-        @Override
-        public final Editor<T> remove(final T... items) {
-            mActions.add(new Action<T>() {
-                @Override
-                public void perform(SortedList<T> list) {
-                    for (T item : items) {
-                        mSortedList.remove(item);
-                    }
                 }
             });
             return this;
@@ -227,7 +198,6 @@ public abstract class SortedListAdapter<T extends ViewModel> extends RecyclerVie
                         final T item = itemsToRemove.get(i);
                         mSortedList.remove(item);
                     }
-                    Collections.sort(items, mComparator);
                     mSortedList.addAll(items);
                 }
             });
@@ -242,5 +212,28 @@ public abstract class SortedListAdapter<T extends ViewModel> extends RecyclerVie
             }
             mSortedList.endBatchedUpdates();
         }
+    }
+
+    public abstract static class ViewHolder<T extends ViewModel> extends RecyclerView.ViewHolder {
+
+        private T mCurrentItem;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        public final void bind(T item) {
+            mCurrentItem = item;
+            performBind(item);
+        }
+
+        protected abstract void performBind(T item);
+
+        public final T getCurrentItem() {
+            return mCurrentItem;
+        }
+    }
+
+    public interface ViewModel {
     }
 }

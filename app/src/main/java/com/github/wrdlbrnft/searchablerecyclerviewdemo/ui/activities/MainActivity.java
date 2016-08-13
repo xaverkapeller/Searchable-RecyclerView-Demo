@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private static final String[] MOVIES = new String[]{
@@ -91,16 +90,19 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
         mAdapter = new ExampleAdapter(this, ALPHABETICAL_COMPARATOR);
+
+        mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mBinding.recyclerView.setAdapter(mAdapter);
 
         mModels = new ArrayList<>();
         for (String movie : MOVIES) {
             mModels.add(new ExampleModel(movie));
         }
-        mAdapter.edit().add(mModels).commit();
-
-        mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mBinding.recyclerView.setAdapter(mAdapter);
+        mAdapter.edit()
+                .update(mModels)
+                .commit();
     }
 
     @Override
@@ -117,7 +119,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextChange(String query) {
         final List<ExampleModel> filteredModelList = filter(mModels, query);
-        mAdapter.edit().update(filteredModelList).commit();
+        mAdapter.edit()
+                .update(filteredModelList)
+                .commit();
         mBinding.recyclerView.scrollToPosition(0);
         return true;
     }
@@ -127,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         return false;
     }
 
-    private List<ExampleModel> filter(List<ExampleModel> models, String query) {
+    private static List<ExampleModel> filter(List<ExampleModel> models, String query) {
         final String lowerCaseQuery = query.toLowerCase();
 
         final List<ExampleModel> filteredModelList = new ArrayList<>();

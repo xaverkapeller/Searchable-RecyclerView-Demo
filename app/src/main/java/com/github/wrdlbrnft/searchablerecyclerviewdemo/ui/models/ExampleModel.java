@@ -1,13 +1,13 @@
 package com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.models;
 
-import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.sortedlistadapter.ViewModel;
+import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.SortedListAdapter;
 
 /**
  * Created with Android Studio
  * User: Xaver
  * Date: 24/05/15
  */
-public class ExampleModel implements ViewModel {
+public class ExampleModel implements SortedListAdapter.ViewModel {
 
     private final String mText;
 
