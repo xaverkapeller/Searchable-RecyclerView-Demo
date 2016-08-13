@@ -1,23 +1,20 @@
 package com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.viewholder;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.TextView;
+import com.github.wrdlbrnft.searchablerecyclerviewdemo.databinding.ItemExampleBinding;
+import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.models.ExampleModel;
+import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.sortedlistadapter.BaseViewHolder;
 
-import com.github.wrdlbrnft.searchablerecyclerviewdemo.R;
-import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.models.ExampleModel;
+public class ExampleViewHolder extends BaseViewHolder<ExampleModel> {
 
-public class ExampleViewHolder extends RecyclerView.ViewHolder {
+    private final ItemExampleBinding mBinding;
 
-    private final TextView tvText;
-
-    public ExampleViewHolder(View itemView) {
-        super(itemView);
-
-        tvText = (TextView) itemView.findViewById(R.id.tvText);
+    public ExampleViewHolder(ItemExampleBinding binding) {
+        super(binding.getRoot());
+        mBinding = binding;
     }
 
-    public void bind(ExampleModel model) {
-        tvText.setText(model.getText());
+    @Override
+    protected void performBind(ExampleModel item) {
+        mBinding.setModel(item);
     }
 }
