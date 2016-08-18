@@ -97,11 +97,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         mBinding.recyclerView.setAdapter(mAdapter);
 
         mModels = new ArrayList<>();
-        for (String movie : MOVIES) {
-            mModels.add(new ExampleModel(movie));
+        for (int i = 0, count = MOVIES.length; i < count; i++) {
+            mModels.add(new ExampleModel(i, MOVIES[i]));
         }
         mAdapter.edit()
-                .update(mModels)
+                .replaceAll(mModels)
                 .commit();
     }
 
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public boolean onQueryTextChange(String query) {
         final List<ExampleModel> filteredModelList = filter(mModels, query);
         mAdapter.edit()
-                .update(filteredModelList)
+                .replaceAll(filteredModelList)
                 .commit();
         mBinding.recyclerView.scrollToPosition(0);
         return true;

@@ -9,10 +9,16 @@ import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
  */
 public class ExampleModel implements SortedListAdapter.ViewModel {
 
+    private final long mId;
     private final String mText;
 
-    public ExampleModel(String text) {
+    public ExampleModel(long id, String text) {
+        mId = id;
         mText = text;
+    }
+
+    public long getId() {
+        return mId;
     }
 
     public String getText() {
@@ -24,14 +30,17 @@ public class ExampleModel implements SortedListAdapter.ViewModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ExampleModel that = (ExampleModel) o;
+        ExampleModel model = (ExampleModel) o;
 
-        return mText != null ? mText.equals(that.mText) : that.mText == null;
+        if (mId != model.mId) return false;
+        return mText != null ? mText.equals(model.mText) : model.mText == null;
 
     }
 
     @Override
     public int hashCode() {
-        return mText != null ? mText.hashCode() : 0;
+        int result = (int) (mId ^ (mId >>> 32));
+        result = 31 * result + (mText != null ? mText.hashCode() : 0);
+        return result;
     }
 }

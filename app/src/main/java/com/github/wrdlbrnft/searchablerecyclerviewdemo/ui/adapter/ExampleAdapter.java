@@ -29,12 +29,12 @@ public class ExampleAdapter extends SortedListAdapter<ExampleModel> {
     }
 
     @Override
-    protected boolean areItemContentsTheSame(ExampleModel oldItem, ExampleModel newItem) {
-        return oldItem.equals(newItem);
+    protected boolean areItemsTheSame(ExampleModel item1, ExampleModel item2) {
+        return item1.getId() == item2.getId();
     }
 
     @Override
-    protected boolean areItemsTheSame(ExampleModel item1, ExampleModel item2) {
-        return item1 == item2;
+    protected boolean areItemContentsTheSame(ExampleModel oldItem, ExampleModel newItem) {
+        return oldItem.equals(newItem);
     }
 }
