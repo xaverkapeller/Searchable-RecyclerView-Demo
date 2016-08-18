@@ -1,8 +1,8 @@
 package com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.viewholder;
 
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.databinding.ItemExampleBinding;
-import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.SortedListAdapter;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.models.ExampleModel;
+import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 
 public class ExampleViewHolder extends SortedListAdapter.ViewHolder<ExampleModel> {
 

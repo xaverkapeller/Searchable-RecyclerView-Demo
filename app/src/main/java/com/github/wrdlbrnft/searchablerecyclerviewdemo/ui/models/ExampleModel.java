@@ -1,6 +1,6 @@
 package com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.models;
 
-import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.SortedListAdapter;
+import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 
 /**
  * Created with Android Studio

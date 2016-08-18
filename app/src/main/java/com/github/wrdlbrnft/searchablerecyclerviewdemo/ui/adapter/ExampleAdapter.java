@@ -1,13 +1,13 @@
 package com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter;
 
 import android.content.Context;
-import android.support.v7.util.SortedList;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.databinding.ItemExampleBinding;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.viewholder.ExampleViewHolder;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.models.ExampleModel;
+import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 
 import java.util.Comparator;
 
