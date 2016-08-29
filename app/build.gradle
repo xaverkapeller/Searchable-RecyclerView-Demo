@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+final travisVersionCode = hasProperty('version_code') ? property('version_code').toInteger() : 1
+final travisVersionName = hasProperty('version_name') ? property('version_name').toInteger() : '1.0'
+
 android {
     compileSdkVersion 24
     buildToolsVersion '24.0.1'
@@ -12,12 +15,19 @@ android {
         applicationId 'com.github.wrdlbrnft.searchablerecyclerviewdemo'
         minSdkVersion 7
         targetSdkVersion 24
-        versionCode 1
-        versionName '1.0'
+        versionCode travisVersionCode
+        versionName travisVersionName
     }
+
+    signingConfigs {
+        release {
+            storeFile rootProject.file('release.jks')
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
