@@ -1,6 +1,6 @@
 {
   "name": "Searchable Recyclerview Demo",
   "tagline": "An example app using a SearchView to filter items in a RecyclerView while taking full advantage of item animations!",
-  "body": " - Runs on Froyo (Android 2.2, API level 7) and above!\r\n - Item Animations are supported starting with Honeycomb (Android 3.0, API level 11)!\r\n\r\nYou can find a complete walkthrough of how to implement all this in [**this answer on Stack Overflow**](http://stackoverflow.com/a/30429439/2310866).\r\n\r\n![demo image](http://i.stack.imgur.com/qDtH7.gif) [![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.github.wrdlbrnft.searchablerecyclerviewdemo)\r\n\r\n",
+  "body": " - Runs on Froyo (Android 2.2, API level 7) and above!\r\n - Item Animations are supported starting with Honeycomb (Android 3.0, API level 11)!\r\n\r\n[![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.github.wrdlbrnft.searchablerecyclerviewdemo)\r\n\r\nYou can find a complete walkthrough of how to implement all this in [**this answer on Stack Overflow**](http://stackoverflow.com/a/30429439/2310866).\r\n\r\n![demo image](http://i.stack.imgur.com/qDtH7.gif) \r\n          ",
   "note": "Don't delete this file! It's used internally to help with page regeneration."
 }
