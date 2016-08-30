@@ -13,4 +13,4 @@ before_install:
 script:
   - ./gradlew clean build assembleRelease -Pversion_code=$TRAVIS_BUILD_NUMBER -Pversion_name=0.1.0.$TRAVIS_BUILD_NUMBER -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_alias=$KEY_ALIAS -Pkey_password=$KEY_PASSWORD
 after_success:
-  - ./gradlew publishApkRelease
+  - ./gradlew publishApkRelease -Pversion_code=$TRAVIS_BUILD_NUMBER -Pversion_name=0.1.0.$TRAVIS_BUILD_NUMBER -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_alias=$KEY_ALIAS -Pkey_password=$KEY_PASSWORD
