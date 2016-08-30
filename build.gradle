@@ -6,6 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.0-beta1'
+        classpath 'com.github.triplet.gradle:play-publisher:1.1.5'
     }
 }
 

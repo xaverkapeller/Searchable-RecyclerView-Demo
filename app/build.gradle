@@ -1,7 +1,8 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.github.triplet.play'
 
 final travisVersionCode = hasProperty('version_code') ? property('version_code').toInteger() : 1
-final travisVersionName = hasProperty('version_name') ? property('version_name') : '1.0'
+final travisVersionName = hasProperty('version_name') ? property('version_name') : '0.1.0.0'
 
 android {
     compileSdkVersion 24
@@ -41,4 +42,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support:recyclerview-v7:24.1.1'
     compile 'com.github.wrdlbrnft:sorted-list-adapter:0.1.0.5'
+}
+
+play {
+    track = 'production'
+    jsonFile = rootProject.file('keys.json')
 }
