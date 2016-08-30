@@ -8,8 +8,8 @@ android:
   - android-24
   - extra-android-m2repository
 before_install:
-  - openssl aes-256-cbc -d -k $SECRET_FILES_KEY -in ./release.jks.enc -out ./release.jks
-  - openssl aes-256-cbc -d -k $SECRET_FILES_KEY -in ./keys.json.enc -out ./keys.json
+  - openssl aes-256-cbc -d -k $SECRET_FILES_KEY -in release.jks.enc -out release.jks
+  - openssl aes-256-cbc -d -k $SECRET_FILES_KEY -in keys.json.enc -out keys.json
 script:
   - ./gradlew clean build assembleRelease -Pversion_code=$TRAVIS_BUILD_NUMBER -Pversion_name=0.1.0.$TRAVIS_BUILD_NUMBER -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_alias=$KEY_ALIAS -Pkey_password=$KEY_PASSWORD
 after_success:
