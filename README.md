@@ -15,4 +15,4 @@ Or if you want to try out the app first you can download it from the Play Store:
 
 ## **For more information visit the [project homepage](https://wrdlbrnft.github.io/Searchable-RecyclerView-Demo/)**
 
-![Demo Image](http://i.stack.imgur.co§m/qDtH7.gif)
+![demo image](http://i.stack.imgur.com/qDtH7.gif) 
