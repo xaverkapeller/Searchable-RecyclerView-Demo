@@ -18,10 +18,11 @@ android {
 
     defaultConfig {
         applicationId 'com.github.wrdlbrnft.searchablerecyclerviewdemo'
-        minSdkVersion 7
+        minSdkVersion 8
         targetSdkVersion 24
         versionCode travisVersionCode
         versionName travisVersionName
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
 
     lintOptions {
@@ -50,6 +51,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support:recyclerview-v7:24.1.1'
     compile 'com.github.wrdlbrnft:sorted-list-adapter:0.1.0.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
 }
 
 play {
