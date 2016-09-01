@@ -43,7 +43,6 @@
 <li><a href="#travis-build-script"><strong>Travis Build Script</strong></a></li>
 </ul>
 </li>
-<li><a href="#demo-image"><strong>Demo Image</strong></a></li>
 </ul>
 
 <h1>
@@ -57,6 +56,11 @@
 <li>This app uses the Android Data Binding Framework. If you are unfamiliar with data binding check out the <a href="https://developer.android.com/topic/libraries/data-binding/index.html"><strong>official guide on the Android Developer Website</strong></a>.</li>
 <li>To simplify the implementation of the <code>RecyclerView.Adapter</code> this project uses the <a href="https://wrdlbrnft.github.io/SortedListAdapter/"><strong>SortedListAdapter Library</strong></a> which is also written by me. What this library exactly does and how it is implemented is explained in the <a href="http://stackoverflow.com/a/30429439/2310866"><strong>Stack Overflow answer I mentioned above</strong></a>.</li>
 </ul>
+
+<h2>
+<a id="demo-image" class="anchor" href="#demo-image" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Demo Image</h2>
+
+<p><img src="http://i.stack.imgur.com/qDtH7.gif" alt="demo image"> </p>
 
 <h1>
 <a id="build-environment" class="anchor" href="#build-environment" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Build Environment</h1>
@@ -242,11 +246,6 @@ play {
   - <span class="pl-s">./gradlew publishApkRelease -Pversion_code=$TRAVIS_BUILD_NUMBER -Pversion_name=0.1.0.$TRAVIS_BUILD_NUMBER -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_alias=$KEY_ALIAS -Pkey_password=$KEY_PASSWORD</span></pre></div>
 
 <p>The <code>after_success</code> section is executed if the build was successful and it's where you are supposed to deploy your artifacts. This projects uses the <a href="https://github.com/Triple-T/gradle-play-publisher"><strong>Gradle Play Publisher</strong></a> plugin to deploy the apk to the Play Store. Since this is still a gradle operation we still need to inject the same gradle properties as above when executing the <code>publishApkRelease</code> task. </p>
-
-<h1>
-<a id="demo-image" class="anchor" href="#demo-image" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Demo Image</h1>
-
-<p><img src="http://i.stack.imgur.com/qDtH7.gif" alt="demo image"> </p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/Wrdlbrnft/Searchable-RecyclerView-Demo">Searchable Recyclerview Demo</a> is maintained by <a href="https://github.com/Wrdlbrnft">Wrdlbrnft</a>.</span>
