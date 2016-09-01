@@ -23,6 +23,7 @@ before_script:
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
+  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
 
 script:
   - ./gradlew clean build assembleRelease connectedAndroidTest -Pversion_code=$TRAVIS_BUILD_NUMBER -Pversion_name=0.1.0.$TRAVIS_BUILD_NUMBER -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_alias=$KEY_ALIAS -Pkey_password=$KEY_PASSWORD
