@@ -20,13 +20,231 @@
 
     <section class="main-content">
       <ul>
-<li>Runs on Froyo (Android 2.2, API level 7) and above!</li>
-<li>Item Animations are supported starting with Honeycomb (Android 3.0, API level 11)!</li>
+<li><strong>Backwards compatible all the way down to Froyo (Android 2.2, API leve 7)!</strong></li>
+<li><strong>Item Animations are supported starting with Honeycomb (Android 3.0, API level 11)!</strong></li>
 </ul>
 
 <p><a href="https://play.google.com/store/apps/details?id=com.github.wrdlbrnft.searchablerecyclerviewdemo"><img src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" alt="Get it on Google Play"></a></p>
 
-<p>You can find a complete walkthrough of how to implement all this in <a href="http://stackoverflow.com/a/30429439/2310866"><strong>this answer on Stack Overflow</strong></a>.</p>
+<p><a href="https://travis-ci.org/Wrdlbrnft/Searchable-RecyclerView-Demo"><img src="https://travis-ci.org/Wrdlbrnft/Searchable-RecyclerView-Demo.svg?branch=master" alt="Build Status"></a></p>
+
+<p>You can find a complete walkthrough of how to implement an app with these features <a href="http://stackoverflow.com/a/30429439/2310866"><strong>on Stack Overflow</strong></a>.</p>
+
+<h1>
+<a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Table of Contents</h1>
+
+<ul>
+<li><a href="#about-the-app"><strong>About the app</strong></a></li>
+<li>
+<a href="#build-environment"><strong>Build Environment</strong></a>
+
+<ul>
+<li><a href="#travis-ci"><strong>Travis CI</strong></a></li>
+<li><a href="#travis-build-script"><strong>Travis Build Script</strong></a></li>
+</ul>
+</li>
+<li><a href="#demo-image"><strong>Demo Image</strong></a></li>
+</ul>
+
+<h1>
+<a id="about-the-app" class="anchor" href="#about-the-app" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>About the app</h1>
+
+<p>The purpose of this app is to demonstrate how to efficiently filter items in a <code>RecyclerView</code> and perform appropriate item animations. If you are looking for a complete walkthrough of how to implement this feature in your app take a look at <a href="http://stackoverflow.com/a/30429439/2310866"><strong>this answer I wrote on Stack Overflow</strong></a>. </p>
+
+<p>Two important things I have to mention:</p>
+
+<ul>
+<li>This app uses the Android Data Binding Framework. If you are unfamiliar with data binding check out the <a href="https://developer.android.com/topic/libraries/data-binding/index.html"><strong>official guide on the Android Developer Website</strong></a>.</li>
+<li>To simplify the implementation of the <code>RecyclerView.Adapter</code> this project uses the <a href="https://wrdlbrnft.github.io/SortedListAdapter/"><strong>SortedListAdapter Library</strong></a> which is also written by me. What this library exactly does and how it is implemented is explained in the <a href="http://stackoverflow.com/a/30429439/2310866"><strong>Stack Overflow answer I mentioned above</strong></a>.</li>
+</ul>
+
+<h1>
+<a id="build-environment" class="anchor" href="#build-environment" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Build Environment</h1>
+
+<p>This section will talk about how the app is built, tested and deployed. All of this is based on the principles of continous integration. I will not focus on the details in the <code>build.gradle</code> or things related to it, but about how the gradle build is executed and how the artifacts are deployed.</p>
+
+<h2>
+<a id="travis-ci" class="anchor" href="#travis-ci" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Travis CI</h2>
+
+<p>Travis CI is used as a build server for this project. It is a cloud based continous integration solution that works very well with projects hosted on GitHub. By adding a simple build script to your repository you can do everything from building, testing and deploying a project. In the spirit of continous integration Travis will for each build set up a new virtual machine download and install all required dependencies (this also includes the Android SDK) and then continue to build and test the project. This ensures that everything that is contained in the repository works everywhere and isn't missing some dependency or required module. </p>
+
+<p>You can set secret environment variables for each project you build on Travis. You would use that for things like API keys and passwords which you should never include in your repository directly.</p>
+
+<h2>
+<a id="travis-build-script" class="anchor" href="#travis-build-script" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Travis Build Script</h2>
+
+<p>Let's take a look at the <code>.travis.yml</code> where all the build steps for this project are defined:</p>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">language:</span> <span class="pl-s">android</span>
+<span class="pl-ent">jdk:</span> <span class="pl-s">oraclejdk8</span>
+
+<span class="pl-ent">env:</span>
+  <span class="pl-ent">global:</span>
+    - <span class="pl-s">ANDROID_TARGET=android-24</span>
+    - <span class="pl-s">ANDROID_ABI=armeabi-v7a</span>
+
+<span class="pl-ent">android:</span>
+  <span class="pl-ent">components:</span>
+  - <span class="pl-s">tools</span>
+  - <span class="pl-s">platform-tools</span>
+  - <span class="pl-s">build-tools-24.0.1</span>
+  - <span class="pl-s">android-24</span>
+  - <span class="pl-s">extra-android-m2repository</span>
+  - <span class="pl-s">sys-img-${ANDROID_ABI}-${ANDROID_TARGET}</span>
+
+<span class="pl-ent">before_install:</span>
+  - <span class="pl-s">openssl aes-256-cbc -d -k $SECRET_FILES_KEY -in release.jks.enc -out release.jks</span>
+  - <span class="pl-s">openssl aes-256-cbc -d -k $SECRET_FILES_KEY -in keys.json.enc -out keys.json</span>
+
+<span class="pl-ent">before_script:</span>
+  - <span class="pl-s">echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI</span>
+  - <span class="pl-s">emulator -avd test -no-skin -no-audio -no-window &amp;</span>
+  - <span class="pl-s">android-wait-for-emulator</span>
+
+<span class="pl-ent">script:</span>
+  - <span class="pl-s">./gradlew clean build assembleRelease connectedAndroidTest -Pversion_code=$TRAVIS_BUILD_NUMBER -Pversion_name=0.1.0.$TRAVIS_BUILD_NUMBER -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_alias=$KEY_ALIAS -Pkey_password=$KEY_PASSWORD</span>
+
+<span class="pl-ent">after_success:</span>
+  - <span class="pl-s">./gradlew publishApkRelease -Pversion_code=$TRAVIS_BUILD_NUMBER -Pversion_name=0.1.0.$TRAVIS_BUILD_NUMBER -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_alias=$KEY_ALIAS -Pkey_password=$KEY_PASSWORD</span></pre></div>
+
+<p>To understand every part of this let's brake it up into a few parts:</p>
+
+<h3>
+<a id="general-configuration" class="anchor" href="#general-configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>General Configuration</h3>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">language:</span> <span class="pl-s">android</span>
+<span class="pl-ent">jdk:</span> <span class="pl-s">oraclejdk8</span></pre></div>
+
+<p>This part at the top defines what you want to build and with what. In this case we are building an Android project and I want to use the Orace JDK 8 to do that. If you would want to build a normal Java project you would set <code>java</code> as language.</p>
+
+<h3>
+<a id="environemt-variables" class="anchor" href="#environemt-variables" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Environemt Variables</h3>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">env:</span>
+  <span class="pl-ent">global:</span>
+    - <span class="pl-s">ANDROID_TARGET=android-24</span>
+    - <span class="pl-s">ANDROID_ABI=armeabi-v7a</span></pre></div>
+
+<p>In this section two environment variables are set. They define the api level and image type of the emulator image which is later used to execute the UI tests.</p>
+
+<h3>
+<a id="defining-android-sdk-components" class="anchor" href="#defining-android-sdk-components" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Defining Android SDK Components</h3>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">android:</span>
+  <span class="pl-ent">components:</span>
+  - <span class="pl-s">tools</span>
+  - <span class="pl-s">platform-tools</span>
+  - <span class="pl-s">build-tools-24.0.1</span>
+  - <span class="pl-s">android-24</span>
+  - <span class="pl-s">extra-android-m2repository</span>
+  - <span class="pl-s">sys-img-${ANDROID_ABI}-${ANDROID_TARGET}</span></pre></div>
+
+<p>This part defines all the Android SDK components that need to be installed on the build server to build the project. In this case that would be the tools and platform-tools as well as build tools version <code>24.0.1</code>. The SDK version used to build the project is defined with <code>android-24</code> since we are compiling for API level 24. <code>extra-android-m2repository</code> is the support repository which contains the support library. The last part is the system image for the emulator. We use the environment variables that were defined above to pick the right one.</p>
+
+<h3>
+<a id="decrypting-secret-files" class="anchor" href="#decrypting-secret-files" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Decrypting Secret Files</h3>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">before_install:</span>
+  - <span class="pl-s">openssl aes-256-cbc -d -k $SECRET_FILES_KEY -in release.jks.enc -out release.jks</span>
+  - <span class="pl-s">openssl aes-256-cbc -d -k $SECRET_FILES_KEY -in keys.json.enc -out keys.json</span></pre></div>
+
+<p>To explain what this does I first need to explain something: The way Travis works is that all files required to build and deploy the project have to be included in the repository. This also includes sentive files like the release keystore which you definitely don't want to publicly distribute. To get around this problem you can include these files in the repository in an encrypted form and decrypt them on Travis only when the build is running. This is what happens above. In the repository the two files <code>release.jks.enc</code> and <code>keys.json.enc</code> are the release keystore and the json which among other things includes the private key for publishing the app to the Play Store. They are both encrypted using an AES 256 bit cipher and Travis can decrypt them before the build using the key phrase I set on Travis as an environment variable. </p>
+
+<p>You can also execute other commands in the <code>before_install</code> section, everything you do in this section happens after the project has been checked out from GitHub, but before the actual build has started.</p>
+
+<h3>
+<a id="starting-the-emulator-for-the-ui-tests" class="anchor" href="#starting-the-emulator-for-the-ui-tests" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Starting the emulator for the UI tests</h3>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">before_script:</span>
+  - <span class="pl-s">echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI</span>
+  - <span class="pl-s">emulator -avd test -no-skin -no-audio -no-window &amp;</span>
+  - <span class="pl-s">android-wait-for-emulator</span></pre></div>
+
+<p>The <code>before_script</code> section is executed directly before the build. In it we start the emulator which we are going to use to execute the UI tests. Again both the environment variables <code>ANDROID_TARGET</code> and <code>ANDROID_ABI</code> are needed to pick the right system image for the emulator. </p>
+
+<h3>
+<a id="building-and-testing" class="anchor" href="#building-and-testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Building and Testing</h3>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">script:</span>
+  - <span class="pl-s">./gradlew clean build assembleRelease connectedAndroidTest -Pversion_code=$TRAVIS_BUILD_NUMBER -Pversion_name=0.1.0.$TRAVIS_BUILD_NUMBER -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_alias=$KEY_ALIAS -Pkey_password=$KEY_PASSWORD</span></pre></div>
+
+<p>The <code>script</code> section is where you should define the actual build steps. This should be everything from building the project to running unit tests and ui tests. When all the commands in the <code>script</code> section are done your project should be fully built, tested and ready to be deployed. </p>
+
+<p>In the case of this project we run the tasks <code>clean build assembleRelease</code> for a normal release build. The task <code>connectedAndroidTest</code> is what runs the UI tests.</p>
+
+<p>With <code>-P</code> you can inject properties into the gradle script. We use that here to inject things like the version code and version name as well as the release keystore password and key password. <code>$TRAVIS_BUILD_NUMBER</code> is an environment variable which is set by Travis automatically and corresponds to the current number of the build. It starts at <code>1</code> and each time your project is built it is incremented.</p>
+
+<p>Inside the <code>build.gradle</code> file of the app I check if the injected properties are present, otherwise (for example when I build the project locally on my computer) I fall back to default values that enable me to develop without having to set these properties:</p>
+
+<div class="highlight highlight-source-groovy"><pre>apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds">'</span>com.android.application<span class="pl-pds">'</span></span>
+apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds">'</span>com.github.triplet.play<span class="pl-pds">'</span></span>
+
+<span class="pl-c">// These variables are used in the defaultConfig to set the version code and version name</span>
+<span class="pl-k">final</span> travisVersionCode <span class="pl-k">=</span> hasProperty(<span class="pl-s"><span class="pl-pds">'</span>version_code<span class="pl-pds">'</span></span>) <span class="pl-k">?</span> property(<span class="pl-s"><span class="pl-pds">'</span>version_code<span class="pl-pds">'</span></span>)<span class="pl-k">.</span>toInteger() <span class="pl-k">:</span> <span class="pl-c1">1</span>
+<span class="pl-k">final</span> travisVersionName <span class="pl-k">=</span> hasProperty(<span class="pl-s"><span class="pl-pds">'</span>version_name<span class="pl-pds">'</span></span>) <span class="pl-k">?</span> property(<span class="pl-s"><span class="pl-pds">'</span>version_name<span class="pl-pds">'</span></span>) <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>0.1.0.0<span class="pl-pds">'</span></span>
+
+<span class="pl-c">// These variables are used for the release signingConfig</span>
+<span class="pl-k">final</span> travisKeystorePassword <span class="pl-k">=</span> hasProperty(<span class="pl-s"><span class="pl-pds">'</span>keystore_password<span class="pl-pds">'</span></span>) <span class="pl-k">?</span> property(<span class="pl-s"><span class="pl-pds">'</span>keystore_password<span class="pl-pds">'</span></span>) <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>
+<span class="pl-k">final</span> travisKeyAlias <span class="pl-k">=</span> hasProperty(<span class="pl-s"><span class="pl-pds">'</span>key_alias<span class="pl-pds">'</span></span>) <span class="pl-k">?</span> property(<span class="pl-s"><span class="pl-pds">'</span>key_alias<span class="pl-pds">'</span></span>) <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>
+<span class="pl-k">final</span> travisKeyPassword <span class="pl-k">=</span> hasProperty(<span class="pl-s"><span class="pl-pds">'</span>key_password<span class="pl-pds">'</span></span>) <span class="pl-k">?</span> property(<span class="pl-s"><span class="pl-pds">'</span>key_password<span class="pl-pds">'</span></span>) <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>
+
+android {
+    compileSdkVersion <span class="pl-c1">24</span>
+    buildToolsVersion <span class="pl-s"><span class="pl-pds">'</span>24.0.1<span class="pl-pds">'</span></span>
+
+    dataBinding {
+        enabled <span class="pl-c1">true</span>
+    }
+
+    defaultConfig {
+        applicationId <span class="pl-s"><span class="pl-pds">'</span>com.github.wrdlbrnft.searchablerecyclerviewdemo<span class="pl-pds">'</span></span>
+        minSdkVersion <span class="pl-c1">7</span>
+        targetSdkVersion <span class="pl-c1">24</span>
+        versionCode travisVersionCode
+        versionName travisVersionName
+    }
+
+    signingConfigs {
+        release {
+            storeFile rootProject<span class="pl-k">.</span>file(<span class="pl-s"><span class="pl-pds">'</span>release.jks<span class="pl-pds">'</span></span>)
+            storePassword travisKeystorePassword
+            keyAlias travisKeyAlias
+            keyPassword travisKeyPassword
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled <span class="pl-c1">true</span>
+            signingConfig signingConfigs<span class="pl-k">.</span>release
+            proguardFiles getDefaultProguardFile(<span class="pl-s"><span class="pl-pds">'</span>proguard-android.txt<span class="pl-pds">'</span></span>), <span class="pl-s"><span class="pl-pds">'</span>proguard-rules.pro<span class="pl-pds">'</span></span>
+        }
+    }
+}
+
+dependencies {
+    compile <span class="pl-s"><span class="pl-pds">'</span>com.android.support:appcompat-v7:24.1.1<span class="pl-pds">'</span></span>
+    compile <span class="pl-s"><span class="pl-pds">'</span>com.android.support:recyclerview-v7:24.1.1<span class="pl-pds">'</span></span>
+    compile <span class="pl-s"><span class="pl-pds">'</span>com.github.wrdlbrnft:sorted-list-adapter:0.1.0.5<span class="pl-pds">'</span></span>
+}
+
+play {
+    track <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>production<span class="pl-pds">'</span></span>
+    jsonFile <span class="pl-k">=</span> rootProject<span class="pl-k">.</span>file(<span class="pl-s"><span class="pl-pds">'</span>keys.json<span class="pl-pds">'</span></span>)
+}</pre></div>
+
+<h3>
+<a id="deploying-the-apk-to-the-play-store" class="anchor" href="#deploying-the-apk-to-the-play-store" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Deploying the APK to the Play Store</h3>
+
+<p>Now there is only on part of the <code>.travis.yml</code> remaining:</p>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">after_success:</span>
+  - <span class="pl-s">./gradlew publishApkRelease -Pversion_code=$TRAVIS_BUILD_NUMBER -Pversion_name=0.1.0.$TRAVIS_BUILD_NUMBER -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_alias=$KEY_ALIAS -Pkey_password=$KEY_PASSWORD</span></pre></div>
+
+<p>The <code>after_success</code> section is executed if the build was successful and it's where you are supposed to deploy your artifacts. This projects uses the <a href="https://github.com/Triple-T/gradle-play-publisher"><strong>Gradle Play Publisher</strong></a> plugin to deploy the apk to the Play Store. Since this is still a gradle operation we still need to inject the same gradle properties as above when executing the <code>publishApkRelease</code> task. </p>
+
+<h1>
+<a id="demo-image" class="anchor" href="#demo-image" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Demo Image</h1>
 
 <p><img src="http://i.stack.imgur.com/qDtH7.gif" alt="demo image"> </p>
 
