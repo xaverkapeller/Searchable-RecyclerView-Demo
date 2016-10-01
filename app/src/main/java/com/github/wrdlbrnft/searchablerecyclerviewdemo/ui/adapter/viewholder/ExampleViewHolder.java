@@ -8,22 +8,16 @@ import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 public class ExampleViewHolder extends SortedListAdapter.ViewHolder<ExampleModel> {
 
     private final ItemExampleBinding mBinding;
-    private final ExampleAdapter.Listener mListener;
 
     public ExampleViewHolder(ItemExampleBinding binding, ExampleAdapter.Listener listener) {
         super(binding.getRoot());
-        binding.setHolder(this);
+        binding.setListener(listener);
 
         mBinding = binding;
-        mListener = listener;
     }
 
     @Override
     protected void performBind(ExampleModel item) {
         mBinding.setModel(item);
-    }
-
-    public void onModelClicked(ExampleModel model) {
-        mListener.onExampleModelClicked(model);
     }
 }

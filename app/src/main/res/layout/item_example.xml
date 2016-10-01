@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="holder"
-            type="com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.viewholder.ExampleViewHolder" />
+            name="listener"
+            type="com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.ExampleAdapter.Listener" />
 
         <variable
             name="model"
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
-        android:onClick="@{view -> holder.onModelClicked(model)}"
+        android:onClick="@{view -> listener.onExampleModelClicked(model)}"
         android:clickable="true">
 
         <TextView
