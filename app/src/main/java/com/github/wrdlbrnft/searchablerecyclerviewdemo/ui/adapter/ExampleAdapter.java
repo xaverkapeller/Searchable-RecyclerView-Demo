@@ -18,14 +18,21 @@ import java.util.Comparator;
  */
 public class ExampleAdapter extends SortedListAdapter<ExampleModel> {
 
-    public ExampleAdapter(Context context, Comparator<ExampleModel> comparator) {
+    public interface Listener {
+        void onExampleModelClicked(ExampleModel model);
+    }
+
+    private final Listener mListener;
+
+    public ExampleAdapter(Context context, Comparator<ExampleModel> comparator, Listener listener) {
         super(context, ExampleModel.class, comparator);
+        mListener = listener;
     }
 
     @Override
     protected ViewHolder<? extends ExampleModel> onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
         final ItemExampleBinding binding = ItemExampleBinding.inflate(inflater, parent, false);
-        return new ExampleViewHolder(binding);
+        return new ExampleViewHolder(binding, mListener);
     }
 
     @Override

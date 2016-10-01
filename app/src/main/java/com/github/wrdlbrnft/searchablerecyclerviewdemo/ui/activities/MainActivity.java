@@ -2,6 +2,7 @@ package com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.activities;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -91,7 +92,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        mAdapter = new ExampleAdapter(this, ALPHABETICAL_COMPARATOR);
+        mAdapter = new ExampleAdapter(this, ALPHABETICAL_COMPARATOR, new ExampleAdapter.Listener() {
+            @Override
+            public void onExampleModelClicked(ExampleModel model) {
+                final String message = getString(R.string.model_clicked_pattern, model.getText());
+                Snackbar.make(mBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+            }
+        });
 
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mBinding.recyclerView.setAdapter(mAdapter);

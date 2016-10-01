@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Searchable RecyclerView Demo</string>
     <string name="action_search">Search</string>
+    <string name="model_clicked_pattern">You clicked on %s!</string>
 </resources>

@@ -18,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId 'com.github.wrdlbrnft.searchablerecyclerviewdemo'
-        minSdkVersion 8
+        minSdkVersion 9
         targetSdkVersion 24
         versionCode travisVersionCode
         versionName travisVersionName
@@ -48,8 +48,9 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.android.support:recyclerview-v7:24.1.1'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:recyclerview-v7:24.2.0'
+    compile 'com.android.support:design:24.2.0'
     compile 'com.github.wrdlbrnft:sorted-list-adapter:0.1.0.5'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
