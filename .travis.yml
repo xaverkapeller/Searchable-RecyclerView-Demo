@@ -3,7 +3,8 @@ jdk: oraclejdk8
 
 env:
   global:
-    - ANDROID_TARGET=23
+    - ANDROID_TARGET=android-24
+    - ANDROID_ABI=arm64-v8a
 
 android:
   components:
@@ -19,7 +20,7 @@ before_install:
   - openssl aes-256-cbc -d -k $SECRET_FILES_KEY -in keys.json.enc -out keys.json
 
 before_script:
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
