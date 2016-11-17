@@ -9,8 +9,8 @@ final travisKeyAlias = hasProperty('key_alias') ? property('key_alias') : ''
 final travisKeyPassword = hasProperty('key_password') ? property('key_password') : ''
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.1'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
 
     dataBinding {
         enabled true
@@ -19,7 +19,7 @@ android {
     defaultConfig {
         applicationId 'com.github.wrdlbrnft.searchablerecyclerviewdemo'
         minSdkVersion 9
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode travisVersionCode
         versionName travisVersionName
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
@@ -48,9 +48,9 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:24.2.0'
-    compile 'com.android.support:recyclerview-v7:24.2.0'
-    compile 'com.android.support:design:24.2.0'
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:recyclerview-v7:25.0.1'
+    compile 'com.android.support:design:25.0.1'
     compile 'com.github.wrdlbrnft:sorted-list-adapter:0.1.0.5'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
