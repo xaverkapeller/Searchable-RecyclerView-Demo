@@ -1,33 +1,20 @@
 language: android
 jdk: oraclejdk8
 
-env:
-  global:
-    - ANDROID_TARGET=android-24
-    - ANDROID_ABI=armeabi-v7a
-
 android:
   components:
   - tools
   - platform-tools
   - build-tools-25.0.2
-  - android-24
   - android-25
   - extra-android-m2repository
-  - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
 
 before_install:
   - openssl aes-256-cbc -d -k $SECRET_FILES_KEY -in release.jks.enc -out release.jks
   - openssl aes-256-cbc -d -k $SECRET_FILES_KEY -in keys.json.enc -out keys.json
 
-before_script:
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-  - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
-
 script:
-  - ./gradlew clean build assembleRelease connectedAndroidTest -Pversion_code=$TRAVIS_BUILD_NUMBER -Pversion_name=0.1.0.$TRAVIS_BUILD_NUMBER -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_alias=$KEY_ALIAS -Pkey_password=$KEY_PASSWORD
+  - ./gradlew clean build assembleRelease -Pversion_code=$TRAVIS_BUILD_NUMBER -Pversion_name=0.1.0.$TRAVIS_BUILD_NUMBER -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_alias=$KEY_ALIAS -Pkey_password=$KEY_PASSWORD
 
 after_success:
   - ./gradlew publishApkRelease -Pversion_code=$TRAVIS_BUILD_NUMBER -Pversion_name=0.1.0.$TRAVIS_BUILD_NUMBER -Pkeystore_password=$KEYSTORE_PASSWORD -Pkey_alias=$KEY_ALIAS -Pkey_password=$KEY_PASSWORD
