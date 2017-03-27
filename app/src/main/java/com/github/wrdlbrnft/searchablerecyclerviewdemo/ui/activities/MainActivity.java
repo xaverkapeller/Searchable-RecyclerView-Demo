@@ -1,5 +1,7 @@
 package com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -9,17 +11,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.R;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.databinding.ActivityMainBinding;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.ExampleAdapter;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.models.ExampleModel;
+import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SortedListAdapter.Callback {
 
     private static final String[] MOVIES = new String[]{
             "The Woman in Black: Angel of Death",
@@ -76,12 +80,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             "Home"
     };
 
-    private static final Comparator<ExampleModel> ALPHABETICAL_COMPARATOR = new Comparator<ExampleModel>() {
-        @Override
-        public int compare(ExampleModel a, ExampleModel b) {
-            return a.getText().compareTo(b.getText());
-        }
-    };
+    private static final Comparator<ExampleModel> ALPHABETICAL_COMPARATOR = new SortedListAdapter.ComparatorBuilder<ExampleModel>()
+            .setModelOrder(ExampleModel.class, new Comparator<ExampleModel>() {
+                @Override
+                public int compare(ExampleModel a, ExampleModel b) {
+                    return a.getText().compareTo(b.getText());
+                }
+            })
+            .build();
 
     private ExampleAdapter mAdapter;
     private List<ExampleModel> mModels;
@@ -99,6 +105,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 Snackbar.make(mBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
             }
         });
+
+        mAdapter.addCallback(this);
 
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mBinding.recyclerView.setAdapter(mAdapter);
@@ -149,5 +157,27 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             }
         }
         return filteredModelList;
+    }
+
+    @Override
+    public void onEditStarted() {
+        if (mBinding.editProgressBar.getVisibility() != View.VISIBLE) {
+            mBinding.editProgressBar.setVisibility(View.VISIBLE);
+            mBinding.editProgressBar.setAlpha(0.0f);
+        }
+        mBinding.editProgressBar.animate().alpha(1.0f).setListener(null);
+        mBinding.recyclerView.animate().alpha(0.5f);
+    }
+
+    @Override
+    public void onEditFinished() {
+        mBinding.recyclerView.animate().alpha(1.0f);
+        mBinding.editProgressBar.animate().alpha(0.0f).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mBinding.editProgressBar.setVisibility(View.GONE);
+            }
+        });
     }
 }

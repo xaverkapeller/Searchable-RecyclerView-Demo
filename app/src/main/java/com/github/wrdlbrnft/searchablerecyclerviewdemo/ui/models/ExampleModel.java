@@ -43,4 +43,21 @@ public class ExampleModel implements SortedListAdapter.ViewModel {
         result = 31 * result + (mText != null ? mText.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public <T> boolean isSameModelAs(T item) {
+        if (item instanceof ExampleModel) {
+            final ExampleModel exampleModel = (ExampleModel) item;
+            return exampleModel.getId() == mId;
+        }
+        return false;
+    }
+
+    @Override
+    public <T> boolean isContentTheSameAs(T item) {
+        if (item instanceof ExampleModel) {
+            return equals(item);
+        }
+        return false;
+    }
 }
