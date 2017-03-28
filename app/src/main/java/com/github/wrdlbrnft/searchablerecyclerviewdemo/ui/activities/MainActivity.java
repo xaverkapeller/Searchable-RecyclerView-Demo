@@ -2,6 +2,7 @@ package com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -12,11 +13,12 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.R;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.databinding.ActivityMainBinding;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.ExampleAdapter;
-import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.models.ExampleModel;
+import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.models.WordModel;
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 
 import java.util.ArrayList;
@@ -25,83 +27,32 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SortedListAdapter.Callback {
 
-    private static final String[] MOVIES = new String[]{
-            "The Woman in Black: Angel of Death",
-            "20 Once Again",
-            "Taken 3",
-            "Tevar",
-            "I",
-            "Blackhat",
-            "Spare Parts",
-            "The Wedding Ringer",
-            "Ex Machina",
-            "Mortdecai",
-            "Strange Magic",
-            "The Boy Next Door",
-            "The SpongeBob Movie: Sponge Out of Water",
-            "Kingsman: The Secret Service",
-            "Boonie Bears: Mystical Winter",
-            "Project Almanac",
-            "Running Man",
-            "Wild Card",
-            "It Follows",
-            "C'est si bon",
-            "Yennai Arindhaal",
-            "Shaun the Sheep Movie",
-            "Jupiter Ascending",
-            "Old Fashioned",
-            "Somewhere Only We Know",
-            "Fifty Shades of Grey",
-            "Dragon Blade",
-            "Zhong Kui: Snow Girl and the Dark Crystal",
-            "Badlapur",
-            "Hot Tub Time Machine 2",
-            "McFarland, USA",
-            "The Duff",
-            "The Second Best Exotic Marigold Hotel",
-            "A la mala",
-            "Focus",
-            "The Lazarus Effect",
-            "Chappie",
-            "Faults",
-            "Road Hard",
-            "Unfinished Business",
-            "Cinderella",
-            "NH10",
-            "Run All Night",
-            "X+Y",
-            "Furious 7",
-            "Danny Collins",
-            "Do You Believe?",
-            "Jalaibee",
-            "The Divergent Series: Insurgent",
-            "The Gunman",
-            "Get Hard",
-            "Home"
-    };
-
-    private static final Comparator<ExampleModel> ALPHABETICAL_COMPARATOR = new SortedListAdapter.ComparatorBuilder<ExampleModel>()
-            .setModelOrder(ExampleModel.class, new Comparator<ExampleModel>() {
+    private static final Comparator<WordModel> ALPHABETICAL_COMPARATOR = new SortedListAdapter.ComparatorBuilder<WordModel>()
+            .setOrderForModel(WordModel.class, new Comparator<WordModel>() {
                 @Override
-                public int compare(ExampleModel a, ExampleModel b) {
-                    return a.getText().compareTo(b.getText());
+                public int compare(WordModel a, WordModel b) {
+                    return Integer.signum(a.getRank() - b.getRank());
                 }
             })
             .build();
 
     private ExampleAdapter mAdapter;
-    private List<ExampleModel> mModels;
     private ActivityMainBinding mBinding;
+    private Animator mAnimator;
+
+    private List<WordModel> mModels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
+        setSupportActionBar(mBinding.toolBar);
+
         mAdapter = new ExampleAdapter(this, ALPHABETICAL_COMPARATOR, new ExampleAdapter.Listener() {
             @Override
-            public void onExampleModelClicked(ExampleModel model) {
-                final String message = getString(R.string.model_clicked_pattern, model.getText());
+            public void onExampleModelClicked(WordModel model) {
+                final String message = getString(R.string.model_clicked_pattern, model.getRank(), model.getWord());
                 Snackbar.make(mBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
             }
         });
@@ -112,8 +63,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         mBinding.recyclerView.setAdapter(mAdapter);
 
         mModels = new ArrayList<>();
-        for (int i = 0, count = MOVIES.length; i < count; i++) {
-            mModels.add(new ExampleModel(i, MOVIES[i]));
+        final String[] words = getResources().getStringArray(R.array.words);
+        for (int i = 0; i < words.length; i++) {
+            mModels.add(new WordModel(i, i + 1, words[i]));
         }
         mAdapter.edit()
                 .replaceAll(mModels)
@@ -133,11 +85,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onQueryTextChange(String query) {
-        final List<ExampleModel> filteredModelList = filter(mModels, query);
+        final List<WordModel> filteredModelList = filter(mModels, query);
         mAdapter.edit()
                 .replaceAll(filteredModelList)
                 .commit();
-        mBinding.recyclerView.scrollToPosition(0);
         return true;
     }
 
@@ -146,13 +97,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         return false;
     }
 
-    private static List<ExampleModel> filter(List<ExampleModel> models, String query) {
+    private static List<WordModel> filter(List<WordModel> models, String query) {
         final String lowerCaseQuery = query.toLowerCase();
 
-        final List<ExampleModel> filteredModelList = new ArrayList<>();
-        for (ExampleModel model : models) {
-            final String text = model.getText().toLowerCase();
-            if (text.contains(lowerCaseQuery)) {
+        final List<WordModel> filteredModelList = new ArrayList<>();
+        for (WordModel model : models) {
+            final String text = model.getWord().toLowerCase();
+            final String rank = String.valueOf(model.getRank());
+            if (text.contains(lowerCaseQuery) || rank.contains(lowerCaseQuery)) {
                 filteredModelList.add(model);
             }
         }
@@ -165,19 +117,47 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             mBinding.editProgressBar.setVisibility(View.VISIBLE);
             mBinding.editProgressBar.setAlpha(0.0f);
         }
-        mBinding.editProgressBar.animate().alpha(1.0f).setListener(null);
+
+        if (mAnimator != null) {
+            mAnimator.cancel();
+        }
+
+        mAnimator = ObjectAnimator.ofFloat(mBinding.editProgressBar, View.ALPHA, 1.0f);
+        mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        mAnimator.start();
+
         mBinding.recyclerView.animate().alpha(0.5f);
     }
 
     @Override
     public void onEditFinished() {
+        mBinding.recyclerView.scrollToPosition(0);
         mBinding.recyclerView.animate().alpha(1.0f);
-        mBinding.editProgressBar.animate().alpha(0.0f).setListener(new AnimatorListenerAdapter() {
+
+        if (mAnimator != null) {
+            mAnimator.cancel();
+        }
+
+        mAnimator = ObjectAnimator.ofFloat(mBinding.editProgressBar, View.ALPHA, 0.0f);
+        mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        mAnimator.addListener(new AnimatorListenerAdapter() {
+
+            private boolean mCanceled = false;
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
+                mCanceled = true;
+            }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                mBinding.editProgressBar.setVisibility(View.GONE);
+                if (!mCanceled) {
+                    mBinding.editProgressBar.setVisibility(View.GONE);
+                }
             }
         });
+        mAnimator.start();
     }
 }

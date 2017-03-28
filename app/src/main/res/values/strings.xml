@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Searchable RecyclerView Demo</string>
+    <string name="title">Most used words</string>
     <string name="action_search">Search</string>
-    <string name="model_clicked_pattern">You clicked on %s!</string>
+    <string name="model_clicked_pattern">You clicked on the rank %1$d word: %2$s!</string>
 </resources>

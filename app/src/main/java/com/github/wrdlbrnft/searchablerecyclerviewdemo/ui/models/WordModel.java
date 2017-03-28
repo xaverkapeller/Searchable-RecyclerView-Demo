@@ -7,22 +7,28 @@ import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
  * User: Xaver
  * Date: 24/05/15
  */
-public class ExampleModel implements SortedListAdapter.ViewModel {
+public class WordModel implements SortedListAdapter.ViewModel {
 
     private final long mId;
-    private final String mText;
+    private final int mRank;
+    private final String mWord;
 
-    public ExampleModel(long id, String text) {
+    public WordModel(long id, int rank, String word) {
         mId = id;
-        mText = text;
+        mRank = rank;
+        mWord = word;
     }
 
     public long getId() {
         return mId;
     }
 
-    public String getText() {
-        return mText;
+    public int getRank() {
+        return mRank;
+    }
+
+    public String getWord() {
+        return mWord;
     }
 
     @Override
@@ -30,32 +36,32 @@ public class ExampleModel implements SortedListAdapter.ViewModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ExampleModel model = (ExampleModel) o;
+        WordModel wordModel = (WordModel) o;
 
-        if (mId != model.mId) return false;
-        return mText != null ? mText.equals(model.mText) : model.mText == null;
+        if (mRank != wordModel.mRank) return false;
+        return mWord != null ? mWord.equals(wordModel.mWord) : wordModel.mWord == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (mId ^ (mId >>> 32));
-        result = 31 * result + (mText != null ? mText.hashCode() : 0);
+        int result = mRank;
+        result = 31 * result + (mWord != null ? mWord.hashCode() : 0);
         return result;
     }
 
     @Override
     public <T> boolean isSameModelAs(T item) {
-        if (item instanceof ExampleModel) {
-            final ExampleModel exampleModel = (ExampleModel) item;
-            return exampleModel.getId() == mId;
+        if (item instanceof WordModel) {
+            final WordModel wordModel = (WordModel) item;
+            return wordModel.mId == mId;
         }
         return false;
     }
 
     @Override
     public <T> boolean isContentTheSameAs(T item) {
-        if (item instanceof ExampleModel) {
+        if (item instanceof WordModel) {
             return equals(item);
         }
         return false;

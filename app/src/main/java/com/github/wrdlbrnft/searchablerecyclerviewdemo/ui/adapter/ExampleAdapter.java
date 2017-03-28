@@ -4,9 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.github.wrdlbrnft.searchablerecyclerviewdemo.databinding.ItemExampleBinding;
-import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.viewholder.ExampleViewHolder;
-import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.models.ExampleModel;
+import com.github.wrdlbrnft.searchablerecyclerviewdemo.databinding.ItemWordBinding;
+import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.viewholder.WordViewHolder;
+import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.models.WordModel;
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 
 import java.util.Comparator;
@@ -16,22 +16,22 @@ import java.util.Comparator;
  * User: Xaver
  * Date: 24/05/15
  */
-public class ExampleAdapter extends SortedListAdapter<ExampleModel> {
+public class ExampleAdapter extends SortedListAdapter<WordModel> {
 
     @Override
-    protected ViewHolder<? extends ExampleModel> onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-        final ItemExampleBinding binding = ItemExampleBinding.inflate(inflater, parent, false);
-        return new ExampleViewHolder(binding, mListener);
+    protected ViewHolder<? extends WordModel> onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
+        final ItemWordBinding binding = ItemWordBinding.inflate(inflater, parent, false);
+        return new WordViewHolder(binding, mListener);
     }
 
     public interface Listener {
-        void onExampleModelClicked(ExampleModel model);
+        void onExampleModelClicked(WordModel model);
     }
 
     private final Listener mListener;
 
-    public ExampleAdapter(Context context, Comparator<ExampleModel> comparator, Listener listener) {
-        super(context, ExampleModel.class, comparator);
+    public ExampleAdapter(Context context, Comparator<WordModel> comparator, Listener listener) {
+        super(context, WordModel.class, comparator);
         mListener = listener;
     }
 }
