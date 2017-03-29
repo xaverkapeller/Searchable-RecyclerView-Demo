@@ -18,12 +18,6 @@ import java.util.Comparator;
  */
 public class ExampleAdapter extends SortedListAdapter<WordModel> {
 
-    @Override
-    protected ViewHolder<? extends WordModel> onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-        final ItemWordBinding binding = ItemWordBinding.inflate(inflater, parent, false);
-        return new WordViewHolder(binding, mListener);
-    }
-
     public interface Listener {
         void onExampleModelClicked(WordModel model);
     }
@@ -33,5 +27,11 @@ public class ExampleAdapter extends SortedListAdapter<WordModel> {
     public ExampleAdapter(Context context, Comparator<WordModel> comparator, Listener listener) {
         super(context, WordModel.class, comparator);
         mListener = listener;
+    }
+
+    @Override
+    protected ViewHolder<? extends WordModel> onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
+        final ItemWordBinding binding = ItemWordBinding.inflate(inflater, parent, false);
+        return new WordViewHolder(binding, mListener);
     }
 }

@@ -32,25 +32,6 @@ public class WordModel implements SortedListAdapter.ViewModel {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        WordModel wordModel = (WordModel) o;
-
-        if (mRank != wordModel.mRank) return false;
-        return mWord != null ? mWord.equals(wordModel.mWord) : wordModel.mWord == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = mRank;
-        result = 31 * result + (mWord != null ? mWord.hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public <T> boolean isSameModelAs(T item) {
         if (item instanceof WordModel) {
             final WordModel wordModel = (WordModel) item;
@@ -62,7 +43,11 @@ public class WordModel implements SortedListAdapter.ViewModel {
     @Override
     public <T> boolean isContentTheSameAs(T item) {
         if (item instanceof WordModel) {
-            return equals(item);
+            final WordModel other = (WordModel) item;
+            if (mRank != other.mRank) {
+                return false;
+            }
+            return mWord != null ? mWord.equals(other.mWord) : other.mWord == null;
         }
         return false;
     }
