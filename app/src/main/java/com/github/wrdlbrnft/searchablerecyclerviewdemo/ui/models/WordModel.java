@@ -1,5 +1,7 @@
 package com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.models;
 
+import android.support.annotation.NonNull;
+
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 
 /**
@@ -32,7 +34,7 @@ public class WordModel implements SortedListAdapter.ViewModel {
     }
 
     @Override
-    public <T> boolean isSameModelAs(T item) {
+    public <T> boolean isSameModelAs(@NonNull T item) {
         if (item instanceof WordModel) {
             final WordModel wordModel = (WordModel) item;
             return wordModel.mId == mId;
@@ -41,7 +43,7 @@ public class WordModel implements SortedListAdapter.ViewModel {
     }
 
     @Override
-    public <T> boolean isContentTheSameAs(T item) {
+    public <T> boolean isContentTheSameAs(@NonNull T item) {
         if (item instanceof WordModel) {
             final WordModel other = (WordModel) item;
             if (mRank != other.mRank) {

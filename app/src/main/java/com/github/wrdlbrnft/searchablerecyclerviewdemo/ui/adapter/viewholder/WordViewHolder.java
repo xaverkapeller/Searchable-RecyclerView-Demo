@@ -1,5 +1,7 @@
 package com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.viewholder;
 
+import android.support.annotation.NonNull;
+
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.databinding.ItemWordBinding;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter.ExampleAdapter;
 import com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.models.WordModel;
@@ -17,7 +19,7 @@ public class WordViewHolder extends SortedListAdapter.ViewHolder<WordModel> {
     }
 
     @Override
-    protected void performBind(WordModel item) {
+    protected void performBind(@NonNull WordModel item) {
         mBinding.setModel(item);
     }
 }

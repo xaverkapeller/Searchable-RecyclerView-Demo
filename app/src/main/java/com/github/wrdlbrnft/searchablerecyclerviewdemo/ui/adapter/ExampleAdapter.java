@@ -1,6 +1,7 @@
 package com.github.wrdlbrnft.searchablerecyclerviewdemo.ui.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -29,8 +30,9 @@ public class ExampleAdapter extends SortedListAdapter<WordModel> {
         mListener = listener;
     }
 
+    @NonNull
     @Override
-    protected ViewHolder<? extends WordModel> onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
+    protected ViewHolder<? extends WordModel> onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent, int viewType) {
         final ItemWordBinding binding = ItemWordBinding.inflate(inflater, parent, false);
         return new WordViewHolder(binding, mListener);
     }
