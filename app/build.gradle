@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.github.triplet.play'
 
-final travisVersionCode = hasProperty('version_code') ? property('version_code').toInteger() : 1
-final travisVersionName = hasProperty('version_name') ? property('version_name') : '0.1.0.0'
-
-final travisKeystorePassword = hasProperty('keystore_password') ? property('keystore_password') : ''
-final travisKeyAlias = hasProperty('key_alias') ? property('key_alias') : ''
-final travisKeyPassword = hasProperty('key_password') ? property('key_password') : ''
+final travisVersionCode = System.getenv('TRAVIS_BUILD_NUMBER') ?: 1
+final travisVersionName = "0.1.0.${travisVersionCode}"
+final travisKeystorePassword = System.getenv('KEYSTORE_PASSWORD') ?: ''
+final travisKeyAlias = System.getenv('KEY_ALIAS') ?: ''
+final travisKeyPassword = System.getenv('KEY_PASSWORD') ?: ''
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
     dataBinding {
         enabled true
@@ -18,8 +17,8 @@ android {
 
     defaultConfig {
         applicationId 'com.github.wrdlbrnft.searchablerecyclerviewdemo'
-        minSdkVersion 9
-        targetSdkVersion 25
+        minSdkVersion 14
+        targetSdkVersion 26
         versionCode travisVersionCode
         versionName travisVersionName
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
@@ -45,13 +44,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.github.wrdlbrnft:sorted-list-adapter:0.2.0.19'
+    api 'com.android.support:appcompat-v7:26.1.0'
+    api 'com.android.support:recyclerview-v7:26.1.0'
+    api 'com.android.support:design:26.1.0'
+    api 'com.github.wrdlbrnft:sorted-list-adapter:0.3.0.25'
 }
 
 play {
