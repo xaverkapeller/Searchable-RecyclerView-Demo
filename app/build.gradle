@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.github.triplet.play'
 
-final travisVersionCode = System.getenv('TRAVIS_BUILD_NUMBER') ?: 1
+final travisVersionCode = (System.getenv('TRAVIS_BUILD_NUMBER') ?: 1) as int
 final travisVersionName = "0.1.0.${travisVersionCode}"
 final travisKeystorePassword = System.getenv('KEYSTORE_PASSWORD') ?: ''
 final travisKeyAlias = System.getenv('KEY_ALIAS') ?: ''
