@@ -5,11 +5,12 @@ android:
   components:
   - tools
   - platform-tools
-  - build-tools-26.0.2
-  - android-26
   - extra-android-m2repository
+  - build-tools-27.0.3
+  - android-27
 
 before_install:
+  - yes | sdkmanager "platforms;android-27"
   - openssl aes-256-cbc -d -k $SECRET_FILES_KEY -in release.jks.enc -out release.jks
   - openssl aes-256-cbc -d -k $SECRET_FILES_KEY -in keys.json.enc -out keys.json
 
