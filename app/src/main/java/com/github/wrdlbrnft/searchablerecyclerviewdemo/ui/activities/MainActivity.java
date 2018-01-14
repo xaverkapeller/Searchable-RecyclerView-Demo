@@ -28,12 +28,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SortedListAdapter.Callback {
 
     private static final Comparator<WordModel> COMPARATOR = new SortedListAdapter.ComparatorBuilder<WordModel>()
-            .setOrderForModel(WordModel.class, new Comparator<WordModel>() {
-                @Override
-                public int compare(WordModel a, WordModel b) {
-                    return Integer.signum(a.getRank() - b.getRank());
-                }
-            })
+            .setOrderForModel(WordModel.class, (a, b) -> Integer.signum(a.getRank() - b.getRank()))
             .build();
 
     private ExampleAdapter mAdapter;
@@ -49,12 +44,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         setSupportActionBar(mBinding.toolBar);
 
-        mAdapter = new ExampleAdapter(this, COMPARATOR, new ExampleAdapter.Listener() {
-            @Override
-            public void onExampleModelClicked(WordModel model) {
-                final String message = getString(R.string.model_clicked_pattern, model.getRank(), model.getWord());
-                Snackbar.make(mBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
-            }
+        mAdapter = new ExampleAdapter(this, COMPARATOR, model -> {
+            final String message = getString(R.string.model_clicked_pattern, model.getRank(), model.getWord());
+            Snackbar.make(mBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
         });
 
         mAdapter.addCallback(this);
